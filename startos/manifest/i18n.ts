@@ -12,7 +12,7 @@ export const long = {
 
 export const nodeDescription = {
   en_US:
-    'Kilojoin reads your coins, checks every other input and broadcasts the coinjoin through your own BLAKE2b node.',
+    'Kilojoin reads your coins, checks every other input and broadcasts the coinjoin through your own BLAKE2b node. Either one works: Bitcoin Knots (BLAKE2b) Companion, or Bitcoin on the BLAKE2b chain.',
   es_ES:
-    'Kilojoin lee tus monedas, comprueba las entradas de los demás y emite el coinjoin a través de tu propio nodo BLAKE2b.',
+    'Kilojoin lee tus monedas, comprueba las entradas de los demás y emite el coinjoin a través de tu propio nodo BLAKE2b. Vale cualquiera de los dos: Bitcoin Knots (BLAKE2b) Companion, o Bitcoin en la cadena BLAKE2b.',
 }

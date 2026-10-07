@@ -58,8 +58,9 @@ One image, built from the `kilojoin` submodule's `Dockerfile`: the jar is compil
 | `wallet.json`   | The account xpub's address indexes in use (receive and change)                                    |
 | `sessions.json` | Pools this server is in: terms, seats, votes, signatures                                          |
 | `settings.json` | The xpub, whether new pools notify, the last pool seen                                            |
+| `startos-store.json` | Which node: `auto`, `knots-blake2b` or `bitcoind` (package state, not Kilojoin's)              |
 
-The knots-blake2b `main` volume is also mounted, **read-only**, at `/mnt/node`, for its RPC cookie.
+The chosen node's `main` volume is also mounted, **read-only**, at `/mnt/node`, for its RPC cookie.
 
 ## File Models
 
@@ -67,11 +68,16 @@ None. Kilojoin writes its own files; the package configures it through environme
 
 ## Dependencies
 
-| Dependency                          | Kind    | Health checks required    | Why                                                               |
-| ----------------------------------- | ------- | ------------------------- | ----------------------------------------------------------------- |
-| `knots-blake2b` (Bitcoin Knots, BLAKE2b) | running | `node`, `sync-progress`   | Wallet scan (`scantxoutset`), checking every pool input (`gettxout`), fee estimates, broadcast |
+One of two BLAKE2b nodes, both declared optional and enabled by the choice in `startos-store.json` (`auto` by default):
 
-The RPC address comes from `sdk.host.getBridgeAddress` on knots-blake2b's `rpc` host, internal port 18443. Credentials are its `.cookie`, re-read on every call, so a node restart that rotates the cookie needs no Kilojoin restart. A pruned node works: nothing needs `txindex`.
+| Dependency | Kind | Health checks required | RPC (host `rpc`) |
+| ---------- | ---- | ---------------------- | ---------------- |
+| `knots-blake2b` (Bitcoin Knots (BLAKE2b) Companion), `>=1.0.0:30` | running | `node`, `sync-progress` | port 18443 |
+| `bitcoind` (Bitcoin on the BLAKE2b chain, e.g. Knots from the POW branch of Retropex/knots-startos), `*` | running | `bitcoind`, `sync-progress` | port 8332 |
+
+`auto` uses `knots-blake2b` when it is installed, otherwise `bitcoind`. Because `bitcoind` is also the id of SHA256d Bitcoin, the `chain` oneshot asks the node `getdeploymentinfo` and starts Kilojoin only if `blake2b` (or rc2's `hardfork`) is active; otherwise it exits with an error saying the node is not on BLAKE2b.
+
+The RPC address comes from `sdk.host.getBridgeAddress` on the chosen node's `rpc` host. Credentials are its `.cookie`, from a read-only mount of its `main` volume, re-read on every call. A pruned node works: nothing needs `txindex`.
 
 ## Network Access and Interfaces
 
@@ -87,7 +93,7 @@ Nothing is configured from StartOS. The first visit to the Web UI asks either to
 
 ## Actions
 
-None.
+**Choose BLAKE2b node** (`choose-node`): Automatic, Bitcoin Knots (BLAKE2b) Companion, or Bitcoin (bitcoind). Writes `startos-store.json`; the dependency and main follow it. Safe to repeat; the wallet is untouched.
 
 ## Tasks
 
@@ -99,7 +105,7 @@ None.
 | --------------- | --------------------------------------------------------------------------------------------- |
 | Web Interface   | Port 8080 is listening                                                                        |
 | Notifications   | Every 20 s, reads new events from `http://127.0.0.1:8080/internal/events` inside the container and posts each one as a StartOS notification |
-| BLAKE2b node    | Shown instead of the two above while knots-blake2b publishes no RPC binding                   |
+| BLAKE2b node    | Shown instead of the two above while the chosen node publishes no RPC binding: says whether it is not installed, too old or stopped |
 
 Events posted: a new pool on the relay (if enabled, checked every 5 minutes), you are in, join refused, someone joined, close now?, stays open, closing, sign now, sent, confirmed, cancelled.
 
@@ -122,13 +128,15 @@ architectures: [x86_64, aarch64]
 volumes:
   main: /data
 dependency_mounts:
-  knots-blake2b/main: /mnt/node (read-only, .cookie)
+  <chosen node>/main: /mnt/node (read-only, .cookie)
 ports:
   ui: 8080
 dependencies:
-  - knots-blake2b (running; health checks node, sync-progress)
+  - knots-blake2b (optional; running; node, sync-progress; rpc 18443)
+  - bitcoind (optional; running; bitcoind, sync-progress; rpc 8332; BLAKE2b checked)
 relay: wss://relay.kilombino.com
-actions: []
+actions: [choose-node]
+oneshots: [chain]
 health_checks: [kilojoin (web interface), notifications]
 backup: main volume
 ```

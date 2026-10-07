@@ -4,7 +4,7 @@ Kilojoin is coinjoin on BTC (BLAKE2b) from your own node. It meets other people 
 
 ## Before you start
 
-- **Bitcoin Knots (BLAKE2b)** installed and **fully synced**. Kilojoin waits for it. A pruned node is enough.
+- A BLAKE2b node installed and **fully synced**: either **Bitcoin Knots (BLAKE2b) Companion** (`knots-blake2b`) or **Bitcoin** (`bitcoind`) running the BLAKE2b chain. Kilojoin picks the one installed (the Companion if both are) and refuses to start on a node that is not on BLAKE2b. To pick by hand, run the action **Choose BLAKE2b node**. A pruned node is enough.
 
 ## Getting set up
 

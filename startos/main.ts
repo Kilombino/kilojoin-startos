@@ -2,11 +2,11 @@ import { T } from '@start9labs/start-sdk'
 import { dependencies } from './dependencies'
 import { i18n } from './i18n'
 import { sdk } from './sdk'
-import { nodeMount, nodeRpcHostId, nodeRpcPort, uiPort } from './utils'
+import { chosenNode, nodeMount, nodes, uiPort } from './utils'
 
-// What Kilojoin needs from the node's manifest (that package is built on an older SDK).
+// What Kilojoin needs from either node's manifest (one of them is on an older SDK).
 type NodeManifest = T.SDKManifest & {
-  id: 'knots-blake2b'
+  id: 'knots-blake2b' | 'bitcoind'
   volumes: ['main', 'i2pd']
 }
 
@@ -19,16 +19,38 @@ const levelOf = (title: string) =>
       ? ('warning' as const)
       : ('info' as const)
 
+// Waits for the node to answer, then asks it, with its cookie, whether BLAKE2b is active:
+// `bitcoind` is also the id of SHA256d Bitcoin. Refuses (exit 1) any other chain.
+// (rc3 renamed getdeploymentinfo's top-level `hardfork` to `blake2b`; accept both.)
+const chainGate = (rpc: string, label: string) => `
+while :; do
+  c="$(cat ${nodeMount}/.cookie 2>/dev/null)"
+  r="$(curl -s -m 10 -u "$c" -H 'Content-Type: application/json' \
+    --data-binary '{"jsonrpc":"1.0","id":"kj","method":"getdeploymentinfo","params":[]}' \
+    http://${rpc}/)"
+  if echo "$r" | grep -q '"result":{'; then
+    echo "$r" | grep -Eq '"(blake2b|hardfork)":\{[^}]*"active":true' && exit 0
+    echo "${label} is not on the BLAKE2b chain. Kilojoin only works on BLAKE2b."
+    exit 1
+  fi
+  echo "Waiting for ${label} to answer RPC"
+  sleep 15
+done
+`
+
 export const main = sdk.setupMain(async ({ effects }) => {
   console.info(i18n('Starting Kilojoin'))
+
+  const nodeId = await chosenNode(effects)
+  const node = nodes[nodeId]
 
   // The node's RPC over the LXC bridge. Null while the node publishes no binding;
   // .const() restarts main when it appears.
   const rpc = await sdk.host
     .getBridgeAddress(effects, {
-      packageId: 'knots-blake2b',
-      hostId: nodeRpcHostId,
-      internalPort: nodeRpcPort,
+      packageId: nodeId,
+      hostId: node.rpcHostId,
+      internalPort: node.rpcPort,
     })
     .const()
   if (!rpc) {
@@ -36,23 +58,22 @@ export const main = sdk.setupMain(async ({ effects }) => {
       ready: {
         display: i18n('BLAKE2b node'),
         gracePeriod: 0,
-        trigger: sdk.trigger.cooldownTrigger(60_000),
+        trigger: sdk.trigger.cooldownTrigger(30_000),
         fn: async () => {
           // Say exactly what is missing: StartOS's own "unmet dependencies" does not.
-          const check = await dependencies.check(effects, ['knots-blake2b'])
-          const installed =
-            check.infoFor('knots-blake2b').result.installedVersion
+          const check = await dependencies.check(effects, [nodeId])
+          const installed = check.infoFor(nodeId).result.installedVersion
           if (!installed)
             return {
               result: 'loading',
-              message: i18n('The BLAKE2b node is not installed'),
+              message: `${node.title} (${nodeId}): ${i18n('not installed. Install it, or pick the other node with the action Choose BLAKE2b node')}`,
             }
-          if (!check.installedVersionSatisfied('knots-blake2b'))
+          if (!check.installedVersionSatisfied(nodeId))
             return {
               result: 'failure',
               message: `${i18n('Update the BLAKE2b node: Kilojoin needs 1.0.0:30 or later, installed is')} ${installed}`,
             }
-          if (!check.runningSatisfied('knots-blake2b'))
+          if (!check.runningSatisfied(nodeId))
             return {
               result: 'loading',
               message: i18n('The BLAKE2b node is stopped'),
@@ -79,7 +100,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
       })
       // Read-only, for the RPC cookie: no password is generated, stored or handed around.
       .mountDependency<NodeManifest>({
-        dependencyId: 'knots-blake2b',
+        dependencyId: nodeId,
         volumeId: 'main',
         subpath: null,
         mountpoint: nodeMount,
@@ -94,6 +115,14 @@ export const main = sdk.setupMain(async ({ effects }) => {
   let since = Date.now()
 
   return sdk.Daemons.of(effects)
+    .addOneshot('chain', {
+      subcontainer: sub,
+      // Waits for the node to answer, then refuses anything but the BLAKE2b chain.
+      exec: {
+        command: ['sh', '-c', chainGate(rpc, `${node.title} (${nodeId})`)],
+      },
+      requires: [],
+    })
     .addDaemon('kilojoin', {
       subcontainer: sub,
       exec: {
@@ -113,7 +142,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
             errorMessage: i18n('The web interface is not ready'),
           }),
       },
-      requires: [],
+      requires: ['chain'],
     })
     .addHealthCheck('notifications', {
       ready: {

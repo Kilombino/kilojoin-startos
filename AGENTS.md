@@ -34,6 +34,7 @@ verified, tried, and decided belongs in the commit message and the PR body.
 
 ## This repo
 
-- **Don't import from `knots-blake2b-startos`** to get `rpcHostId`/`rpcPort` — it is built on SDK 2 and breaks `tsc` here; the two constants in `startos/utils.ts` are copied from its documented contract (host `rpc`, port 18443, not 8332).
+- **Don't import from the node packages** to get their host ids and ports — `knots-blake2b-startos` is on SDK 2 and breaks `tsc` here; `nodes` in `startos/utils.ts` copies both contracts (knots-blake2b: 18443; Retropex bitcoind POW: 8332).
+- **Never drop the `chain` oneshot**: `bitcoind` is also SHA256d Bitcoin's id.
 - **The protocol code is Kilowallet's**, compiled from `kilojoin/kilowallet` (a submodule of the submodule). Clone with `--recursive`, or `git submodule update --init --recursive`.
 - **Build with a `docker-container` buildx builder** (`BUILDX_BUILDER=<name> make`); the default `docker` driver cannot export the image the pack step needs.

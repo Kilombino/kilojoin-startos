@@ -1,0 +1,3 @@
+[submodule "kilojoin"]
+	path = kilojoin
+	url = https://github.com/Kilombino/kilojoin.git

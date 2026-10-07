@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.1.2:0',
+  version: '0.2.0:0',
   releaseNotes: {
     en_US:
-      'The receive address stays on screen with a COPY button. During a vote: time left, and END POOL / LEAVE. When a vote runs out with too few yes, whoever did not answer is left out of the pool.',
+      'SEND with coin control (mixed coins stay apart, the review warns), PREPARE AN EXACT COIN for a pool, coins labelled mixed or change, and the wallet rescans by itself after a round and every 10 minutes.',
     es_ES:
-      'La dirección de recibir se queda en pantalla con botón COPY. Durante una votación: tiempo restante, y END POOL / LEAVE. Si la votación vence con pocos sí, quien no contestó queda fuera del pool.',
+      'ENVIAR con control de monedas (las mezcladas aparte, la revisión avisa), PREPARAR una moneda exacta para un pool, monedas etiquetadas como mezcladas o cambio, y la wallet se reescanea sola tras una ronda y cada 10 minutos.',
   },
   migrations: {
     up: async ({ effects }) => {},

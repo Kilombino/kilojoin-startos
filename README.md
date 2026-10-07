@@ -57,7 +57,7 @@ One image, built from the `kilojoin` submodule's `Dockerfile`: the jar is compil
 | `vault.json`    | The BIP-39 words and passphrase, encrypted with the user's password (PBKDF2-SHA256, 600,000 rounds, then AES-GCM) |
 | `wallet.json`   | The account xpub's address indexes in use (receive and change)                                    |
 | `sessions.json` | Pools this server is in: terms, seats, votes, signatures                                          |
-| `settings.json` | The xpub, whether new pools notify, the last pool seen                                            |
+| `settings.json` | The xpub, whether new pools notify, the last pool seen, the scripts of mixed outputs             |
 | `startos-store.json` | Which node: `auto`, `knots-blake2b` or `bitcoind` (package state, not Kilojoin's)              |
 
 The chosen node's `main` volume is also mounted, **read-only**, at `/mnt/node`, for its RPC cookie.
@@ -115,7 +115,7 @@ The `main` volume. Restoring needs the password that was in use when the backup 
 
 ## Limitations and Differences
 
-- Single-signature BIP84 wallet (`bc1q…`) on the BLAKE2b chain; spending happens only through coinjoin rounds. To spend elsewhere, import the same words into Kilowallet or another BIP84 wallet on that chain.
+- Single-signature BIP84 wallet (`bc1q…`) on the BLAKE2b chain. Sends are coin-controlled and signed with the unified sighash (0x21); a send that would link a mixed coin to others needs confirming. Coins are found with `scantxoutset`, so only confirmed coins show; the wallet rescans after a round confirms and every 10 minutes.
 - Pools from 10,000 sats to 1 BTC. Each person pays the same fee share, `ceil(feeRate × (68 + 31 + 31 if change + 10.5 / 2))` sats.
 - The relay connection is clearnet.
 

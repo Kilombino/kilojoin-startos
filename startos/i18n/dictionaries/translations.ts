@@ -14,5 +14,7 @@ export default {
     9: 'Los avisos de los pools aparecen como notificaciones de StartOS',
     10: 'Interfaz web',
     11: 'Tu wallet y tus pools de coinjoin',
+    12: 'Actualiza el nodo BLAKE2b: Kilojoin necesita la 1.0.0:30 o posterior, la instalada es',
+    13: 'El nodo BLAKE2b está parado',
   },
 } satisfies Record<string, LangDict>

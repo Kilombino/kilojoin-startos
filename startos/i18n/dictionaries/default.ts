@@ -12,6 +12,8 @@ const dict = {
   Notifications: 7,
   'Waiting for Kilojoin': 8,
   'Pool events show up as StartOS notifications': 9,
+  'Update the BLAKE2b node: Kilojoin needs 1.0.0:30 or later, installed is': 12,
+  'The BLAKE2b node is stopped': 13,
 
   // interfaces.ts
   'Web UI': 10,

@@ -37,18 +37,31 @@ export const main = sdk.setupMain(async ({ effects }) => {
         display: i18n('BLAKE2b node'),
         gracePeriod: 0,
         trigger: sdk.trigger.cooldownTrigger(60_000),
-        fn: async () =>
-          (
-            await dependencies.check(effects, ['knots-blake2b'])
-          ).installedSatisfied('knots-blake2b')
-            ? {
-                result: 'loading',
-                message: i18n('Waiting for the node to publish its RPC'),
-              }
-            : {
-                result: 'loading',
-                message: i18n('The BLAKE2b node is not installed'),
-              },
+        fn: async () => {
+          // Say exactly what is missing: StartOS's own "unmet dependencies" does not.
+          const check = await dependencies.check(effects, ['knots-blake2b'])
+          const installed =
+            check.infoFor('knots-blake2b').result.installedVersion
+          if (!installed)
+            return {
+              result: 'loading',
+              message: i18n('The BLAKE2b node is not installed'),
+            }
+          if (!check.installedVersionSatisfied('knots-blake2b'))
+            return {
+              result: 'failure',
+              message: `${i18n('Update the BLAKE2b node: Kilojoin needs 1.0.0:30 or later, installed is')} ${installed}`,
+            }
+          if (!check.runningSatisfied('knots-blake2b'))
+            return {
+              result: 'loading',
+              message: i18n('The BLAKE2b node is stopped'),
+            }
+          return {
+            result: 'loading',
+            message: i18n('Waiting for the node to publish its RPC'),
+          }
+        },
       },
       requires: [],
     })

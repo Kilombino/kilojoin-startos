@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.2.1:0',
+  version: '0.3.0:0',
   releaseNotes: {
     en_US:
-      'Pools whose creator has closed the app are no longer listed (open pools are re-announced every 10 minutes); same coinjoin code as Kilowallet 0.22.1.',
+      'Pool events can also reach you on Telegram, with sound, through your own bot (settings in the web interface). New option: accept close requests and sign on its own, only when the final transaction checks out and while Kilojoin is unlocked.',
     es_ES:
-      'Los pools cuyo creador ha cerrado la app ya no salen en la lista (los abiertos se reanuncian cada 10 minutos); mismo código de coinjoin que Kilowallet 0.22.1.',
+      'Los avisos de los pools también pueden llegarte por Telegram, con sonido, a través de tu propio bot (ajustes en la interfaz web). Opción nueva: aceptar los cierres y firmar solo, únicamente cuando la transacción final cuadra y mientras Kilojoin está desbloqueado.',
   },
   migrations: {
     up: async ({ effects }) => {},

@@ -23,9 +23,10 @@ The wallet rescans by itself after a round confirms and every 10 minutes (SCAN A
 
 - **Open a pool**: choose the amount every output will have (from 10,000 sats to 1 BTC), the fee rate and how many people. Other people see it in Kilowallet and on their own Kilojoin.
 - **Join a pool**: pick one of the open pools and one of your coins. A coin worth the pool amount plus your fee share is marked **★ EXACT** and leaves no change.
-- **PREPARE AN EXACT COIN**: when you have none, this sends exactly that amount to a fresh address of your own, paid with unmixed coins only. After one confirmation it joins with no change.
+- **PREPARE AN EXACT COIN**: when you have none, this sends exactly that amount to a fresh address of your own, paid with unmixed coins only. After one confirmation it joins the pool (or opens the one you were setting up) by itself, with no change.
 - When the pool is full, or someone asks to close it, everyone votes. A "not yet" reopens the pool.
-- Nothing is signed until you press **Sign**: Kilojoin checks that your mixed output and your change are in the transaction.
+- **Sign on its own** (on by default): Kilojoin accepts closing and signs by itself, so unlocking to open or join is the only time it asks. The keys of that round's coins stay in memory until it ends, also after you lock the page; if Kilojoin restarts, unlock it once to sign. Untick it to press **Sign** yourself.
+- Before signing, Kilojoin checks that your mixed output and your change are in the transaction and that your fee share is right. A round closed with fewer people than the pool's minimum is never signed.
 - Each person pays the same fee share. It is shown before you join.
 
 ## Notifications

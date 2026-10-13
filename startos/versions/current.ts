@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.5.0:0',
+  version: '0.6.0:0',
   releaseNotes: {
     en_US:
-      'Kilojoin v2, the same as Kilowallet 0.27: Taproot pools (bc1p coins and outputs only) and several coins per person, chosen with coin control. Kilojoin now also has a Taproot account (BIP-86) next to its native SegWit one, set up the next time you unlock it; you can receive on either, and sends can mix both. Every coin that joins a pool is checked against your node, script included. Native SegWit pools of one coin each still work with older versions.',
+      "One unlock per pool, as in Kilowallet 1.0. Sign on its own is now on by default: unlocking to open or join a pool is the only time it asks, and the round accepts closing and signs by itself, also after you lock the page (the keys of that round's coins stay in memory until it ends). The perfect (exact) coin now joins its pool, or opens the one you were setting up, by itself at its first confirmation. Security: a round closed with fewer people than the pool's minimum is never signed.",
     es_ES:
-      'Kilojoin v2, igual que Kilowallet 0.27: pools Taproot (solo monedas y salidas bc1p) y varias monedas por persona, elegidas con coin control. Kilojoin tiene ahora también una cuenta Taproot (BIP-86) junto a la native SegWit, que se crea la próxima vez que lo desbloquees; puedes recibir en las dos y los envíos pueden mezclarlas. Cada moneda que entra en un pool se comprueba contra tu nodo, script incluido. Los pools native SegWit de una moneda por persona siguen funcionando con versiones anteriores.',
+      "Un desbloqueo por pool, como en Kilowallet 1.0. Firmar solo viene ahora activado: desbloquear para abrir o unirte a un pool es la única vez que pregunta, y la ronda acepta el cierre y firma sola, también después de bloquear la página (las claves de las monedas de esa ronda quedan en memoria hasta que acaba). La moneda perfecta (exacta) entra ahora sola en su pool, o abre el que estabas preparando, al tener su primera confirmación. Seguridad: nunca se firma una ronda cerrada con menos gente que el mínimo del pool.",
   },
   migrations: {
     up: async ({ effects }) => {},

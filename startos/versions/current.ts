@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.6.1:0',
+  version: '0.6.2:0',
   releaseNotes: {
     en_US:
-      "Coinjoin as in the Kilowallet app: JOIN, IN PROGRESS and HISTORY tabs, and a compact card per round with the bar of its five steps (people, closing vote, signatures, sent, confirmed), what is happening and where your coin is. Tap a card for its details and buttons; it opens by itself when the round waits on you. Includes 0.6.0: one unlock per pool, the perfect coin joins by itself, rounds under the pool's minimum never signed.",
+      "A coinjoin round whose pool's creator had gone (its app closed) could stay in progress for good, stuck at the closing vote even after the pool expired. Now a vote also ends with the pool's expiry, the others give up three minutes past its deadline if the creator neither closed nor reopened it, and a pool its creator has not re-announced for 35 minutes is let go. The round goes to the history; your coin never left.",
     es_ES:
-      'Coinjoin como en la app Kilowallet: pestañas JOIN, IN PROGRESS y HISTORY, y una tarjeta compacta por ronda con la barra de sus cinco pasos (gente, votación, firmas, enviado, confirmado), lo que está pasando y dónde está tu moneda. Toca una tarjeta para ver el detalle y los botones; se abre sola cuando la ronda espera por ti. Incluye 0.6.0: un desbloqueo por pool, la moneda perfecta entra sola, nunca se firma una ronda con menos gente que el mínimo.',
+      'Una ronda de coinjoin cuyo creador se había ido (su app cerrada) podía quedarse en curso para siempre, atascada en la votación de cierre incluso con el pool ya caducado. Ahora una votación también termina cuando caduca el pool, los demás se retiran a los tres minutos del plazo si el creador no cerró ni reabrió, y un pool que su creador lleva 35 minutos sin anunciar se suelta. La ronda pasa al historial; tu moneda nunca salió.',
   },
   migrations: {
     up: async ({ effects }) => {},

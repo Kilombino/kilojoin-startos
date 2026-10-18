@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.6.2:0',
+  version: '0.7.0:0',
   releaseNotes: {
     en_US:
-      "A coinjoin round whose pool's creator had gone (its app closed) could stay in progress for good, stuck at the closing vote even after the pool expired. Now a vote also ends with the pool's expiry, the others give up three minutes past its deadline if the creator neither closed nor reopened it, and a pool its creator has not re-announced for 35 minutes is let go. The round goes to the history; your coin never left.",
+      "Kilojoin v3, as in Kilowallet 1.1.5: every pool you open now has blind outputs. When a round closes, each member's mixed output is signed blindly by the pool's creator and handed in from a fresh key, so nobody (not the relay, the other members, or the creator) can tell whose output is whose. Only the creator's own key runs the pool, votes and leaving are proven with a code tied to each seat, and every member checks every seat's coins against the chain. v1 and v2 pools still join as before; wallets older than Kilowallet 1.1.5 or Kilojoin 0.7 don't see v3 pools.",
     es_ES:
-      'Una ronda de coinjoin cuyo creador se había ido (su app cerrada) podía quedarse en curso para siempre, atascada en la votación de cierre incluso con el pool ya caducado. Ahora una votación también termina cuando caduca el pool, los demás se retiran a los tres minutos del plazo si el creador no cerró ni reabrió, y un pool que su creador lleva 35 minutos sin anunciar se suelta. La ronda pasa al historial; tu moneda nunca salió.',
+      'Kilojoin v3, como en Kilowallet 1.1.5: todos los pools que abras tienen ahora salidas ciegas. Al cerrar una ronda, el creador del pool firma a ciegas la salida mezclada de cada miembro, y cada uno la entrega desde una clave nueva, así que nadie (ni el relay, ni los demás miembros, ni el creador) puede saber qué salida es de quién. Solo la clave propia del creador dirige el pool, los votos y las salidas se demuestran con un código ligado a cada asiento, y cada miembro comprueba las monedas de todos los asientos contra la cadena. Los pools v1 y v2 se siguen uniendo como antes; las carteras anteriores a Kilowallet 1.1.5 o Kilojoin 0.7 no ven los pools v3.',
   },
   migrations: {
     up: async ({ effects }) => {},

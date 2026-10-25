@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.8.0:0',
+  version: '0.9.0:0',
   releaseNotes: {
     en_US:
-      "Kilojoin v4, as in Kilowallet 1.2.0: whoever opens a pool now picks how many mixed outputs each person gets, 1 to 5. With 4 outputs of 1 000 000 sats, the perfect coin is 4 000 000 plus the fee, and each person gets four outputs of 1 000 000 to four unused addresses of their own. Each output is signed blindly and handed in on its own (its own key, connection and wait), so not even the creator can tell which outputs are the same person's. A pool of one output each is still announced as v3, so every v3 wallet can join it; only Kilowallet 1.2.0 and Kilojoin 0.8 or newer see pools of 2 to 5 outputs.",
+      "Kilojoin v5, as in Kilowallet 1.3.0: payment pools are listed and joined, and every member checks the creator's payments before signing. SEND takes several recipients and can pay them through a new pool: equal amounts make a pool whose outputs for you go to the recipients, different ones a payment pool, where the others put in the same total and get it back in equal outputs; nothing is paid until the pool closes, and BACK returns to SEND as it was. Open a pool from your coins: tick whole coins and the amount is worked out so there is no change. The pool minimum is now per person in all (2 × 5 000 is a pool, 3 × 3 000 only a test). Only Kilowallet 1.2.7 and Kilojoin 0.9 or newer see payment pools.",
     es_ES:
-      'Kilojoin v4, como en Kilowallet 1.2.0: quien abre un pool elige ahora cuántas salidas mezcladas recibe cada persona, de 1 a 5. Con 4 salidas de 1 000 000 sats, la moneda perfecta es 4 000 000 más la comisión, y cada uno recibe cuatro salidas de 1 000 000 en cuatro direcciones suyas sin usar. Cada salida se firma a ciegas y se entrega por separado (su propia clave, conexión y espera), así que ni el creador sabe qué salidas son de la misma persona. Un pool de una salida por persona se sigue anunciando como v3 y cualquier cartera v3 puede unirse; los pools de 2 a 5 salidas solo los ven Kilowallet 1.2.0 y Kilojoin 0.8 o posteriores.',
+      'Kilojoin v5, como en Kilowallet 1.3.0: los pools de pago se listan y se unen, y cada miembro comprueba los pagos del creador antes de firmar. ENVIAR admite varios destinatarios y puede pagarles a través de un pool nuevo: importes iguales abren un pool cuyas salidas para ti van a los destinatarios; importes distintos, un pool de pago, donde los demás ponen el mismo total y lo recuperan en salidas iguales; no se paga nada hasta que el pool se cierra, y ATRÁS vuelve a ENVIAR tal como estaba. Abrir un pool con tus monedas: marca monedas enteras y el importe se calcula para que no haya cambio. El mínimo de un pool es ahora por persona en total (2 × 5 000 es un pool, 3 × 3 000 solo una prueba). Los pools de pago solo los ven Kilowallet 1.2.7 y Kilojoin 0.9 o posteriores.',
   },
   migrations: {
     up: async ({ effects }) => {},

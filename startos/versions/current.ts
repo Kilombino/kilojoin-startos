@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.3:0',
+  version: '0.10.0:0',
   releaseNotes: {
     en_US:
-      'Opening a pool showed a yellow message, JSONObject["pool"] not found, although the pool was opened: right after opening it, the page also tried to join it as if it were a pool from the list. It no longer does. Pools opened with 0.9.2 are fine; if you pressed Open the pool again thinking it had failed, close the extra pool from In progress (nothing was signed, so no coin moves).',
+      'Kilojoin v6: pools with asynchronous rounds, for people who answer at different times. Open one from the web page with "Asynchronous rounds": up to an hour to answer a vote, 30 minutes to hand in the outputs and two hours to sign. You can answer and come back only when your node has to act again; whoever holds every signature sends the transaction. Rounds are now kept on disk, so a restart of the service does not lose a round in progress. Same as Kilowallet 1.5.0. Pools v1 to v5 work as before.',
     es_ES:
-      'Al abrir un pool salía un mensaje amarillo, JSONObject["pool"] not found, aunque el pool sí se abría: justo después de abrirlo, la página intentaba además unirse a él como si fuera un pool de la lista. Ya no lo hace. Los pools abiertos con la 0.9.2 están bien; si pulsaste Open the pool otra vez pensando que había fallado, cierra el pool de más desde In progress (no se ha firmado nada, así que ninguna moneda se mueve).',
+      'Kilojoin v6: pools con rondas asíncronas, para gente que contesta a horas distintas. Ábrelo desde la página web con "Asynchronous rounds": hasta una hora para contestar a una votación, 30 minutos para entregar las salidas y dos horas para firmar. Puedes contestar y volver solo cuando tu nodo tenga que actuar otra vez; quien junta todas las firmas envía la transacción. Las rondas se guardan ahora en disco, así que reiniciar el servicio no pierde una ronda en curso. Igual que Kilowallet 1.5.0. Los pools v1 a v5 funcionan como antes.',
   },
   migrations: {
     up: async ({ effects }) => {},

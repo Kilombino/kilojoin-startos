@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.10.1:0',
+  version: '0.10.2:0',
   releaseNotes: {
     en_US:
-      'Coinjoin rounds are safer after you sign: the coins of a round you signed stay reserved until its transaction confirms, or until a coin of the round is spent elsewhere and that spend is 6 blocks deep (a spend still in the mempool, or a block or two deep, no longer frees them). A round counts as confirmed only after 6 blocks, and if a reorganisation drops its transaction it is sent again. A failed broadcast no longer cancels the round, and a transaction not seen for 12 hours is no longer given up: it is sent again until a node takes it. This applies to every pool. In asynchronous (v6) pools a node that signed posts its signatures again every day, and a new vote opens by itself only when a whole round still fits before the pool ends. Same protocol: works with Kilojoin 0.10.0, Kilowallet 1.5.0 and other v6 wallets. Same as Kilowallet 1.5.1.',
+      'A member of an asynchronous (v6) pool no longer leaves with "the pool expired" while the pool can still reopen a vote before its final time: after a vote that timed out, it waits for the creator\'s new vote until the pool\'s final time, as the protocol says. Same messages: works with Kilojoin 0.10.1, Kilowallet 1.5.1 and other v6 wallets. Same as Kilowallet 1.5.2.',
     es_ES:
-      'Las rondas de coinjoin son más seguras después de firmar: las monedas de una ronda que firmaste siguen reservadas hasta que su transacción confirma, o hasta que una moneda de la ronda se gasta en otra transacción con 6 bloques encima (un gasto aún en la mempool, o con uno o dos bloques, ya no las libera). Una ronda cuenta como confirmada solo tras 6 bloques, y si una reorganización tira su transacción, se envía de nuevo. Un envío fallido ya no cancela la ronda, y una transacción que no aparece en 12 horas ya no se abandona: se reenvía hasta que un nodo la acepta. Vale para todos los pools. En los pools asíncronos (v6) un nodo que firmó vuelve a publicar sus firmas cada día, y una votación nueva se abre sola solo si aún cabe una ronda entera antes del final del pool. Mismo protocolo: funciona con Kilojoin 0.10.0, Kilowallet 1.5.0 y otras carteras v6. Igual que Kilowallet 1.5.1.',
+      'Un miembro de un pool asíncrono (v6) ya no se va con "the pool expired" mientras el pool aún puede reabrir una votación antes de su hora final: tras una votación que agotó su plazo, espera la votación nueva del creador hasta la hora final del pool, como dice el protocolo. Mismos mensajes: funciona con Kilojoin 0.10.1, Kilowallet 1.5.1 y otras carteras v6. Igual que Kilowallet 1.5.2.',
   },
   migrations: {
     up: async ({ effects }) => {},

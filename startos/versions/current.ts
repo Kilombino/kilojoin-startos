@@ -1,12 +1,12 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.10.0:0',
+  version: '0.10.1:0',
   releaseNotes: {
     en_US:
-      'Kilojoin v6: pools with asynchronous rounds, for people who answer at different times. Open one from the web page with "Asynchronous rounds": up to an hour to answer a vote, 30 minutes to hand in the outputs and two hours to sign. You can answer and come back only when your node has to act again; whoever holds every signature sends the transaction. Rounds are now kept on disk, so a restart of the service does not lose a round in progress. Same as Kilowallet 1.5.0. Pools v1 to v5 work as before.',
+      'Coinjoin rounds are safer after you sign: the coins of a round you signed stay reserved until its transaction confirms, or until a coin of the round is spent elsewhere and that spend is 6 blocks deep (a spend still in the mempool, or a block or two deep, no longer frees them). A round counts as confirmed only after 6 blocks, and if a reorganisation drops its transaction it is sent again. A failed broadcast no longer cancels the round, and a transaction not seen for 12 hours is no longer given up: it is sent again until a node takes it. This applies to every pool. In asynchronous (v6) pools a node that signed posts its signatures again every day, and a new vote opens by itself only when a whole round still fits before the pool ends. Same protocol: works with Kilojoin 0.10.0, Kilowallet 1.5.0 and other v6 wallets. Same as Kilowallet 1.5.1.',
     es_ES:
-      'Kilojoin v6: pools con rondas asíncronas, para gente que contesta a horas distintas. Ábrelo desde la página web con "Asynchronous rounds": hasta una hora para contestar a una votación, 30 minutos para entregar las salidas y dos horas para firmar. Puedes contestar y volver solo cuando tu nodo tenga que actuar otra vez; quien junta todas las firmas envía la transacción. Las rondas se guardan ahora en disco, así que reiniciar el servicio no pierde una ronda en curso. Igual que Kilowallet 1.5.0. Los pools v1 a v5 funcionan como antes.',
+      'Las rondas de coinjoin son más seguras después de firmar: las monedas de una ronda que firmaste siguen reservadas hasta que su transacción confirma, o hasta que una moneda de la ronda se gasta en otra transacción con 6 bloques encima (un gasto aún en la mempool, o con uno o dos bloques, ya no las libera). Una ronda cuenta como confirmada solo tras 6 bloques, y si una reorganización tira su transacción, se envía de nuevo. Un envío fallido ya no cancela la ronda, y una transacción que no aparece en 12 horas ya no se abandona: se reenvía hasta que un nodo la acepta. Vale para todos los pools. En los pools asíncronos (v6) un nodo que firmó vuelve a publicar sus firmas cada día, y una votación nueva se abre sola solo si aún cabe una ronda entera antes del final del pool. Mismo protocolo: funciona con Kilojoin 0.10.0, Kilowallet 1.5.0 y otras carteras v6. Igual que Kilowallet 1.5.1.',
   },
   migrations: {
     up: async ({ effects }) => {},

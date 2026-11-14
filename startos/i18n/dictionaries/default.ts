@@ -21,6 +21,13 @@ const dict = {
   'Choose BLAKE2b node': 16,
   'Which installed node Kilojoin reads the chain from': 17,
 
+  // actions/deleteWallet.ts
+  'Delete wallet': 18,
+  'Removes the wallet from Kilojoin so you can create or import another one': 19,
+  'This deletes the seed words stored in Kilojoin. Before you go on: move every coin out and make sure you have the words written down. Without the words, coins left in this wallet are lost.': 20,
+  'Wallet deleted': 21,
+  'Start Kilojoin and open its web interface: it will ask you to create a new wallet or import one with its words.': 22,
+
   // interfaces.ts
   'Web UI': 10,
   'Your wallet and your coinjoin pools': 11,

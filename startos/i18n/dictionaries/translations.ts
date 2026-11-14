@@ -20,5 +20,10 @@ export default {
     15: 'Automático',
     16: 'Elegir nodo BLAKE2b',
     17: 'De qué nodo instalado lee Kilojoin la cadena',
+    18: 'Borrar monedero',
+    19: 'Quita el monedero de Kilojoin para crear o importar otro',
+    20: 'Esto borra las palabras semilla guardadas en Kilojoin. Antes de seguir, saca todas las monedas y asegúrate de tener las palabras apuntadas. Sin las palabras, las monedas que queden en este monedero se pierden.',
+    21: 'Monedero borrado',
+    22: 'Arranca Kilojoin y abre su interfaz web: te pedirá crear un monedero nuevo o importar uno con sus palabras.',
   },
 } satisfies Record<string, LangDict>
